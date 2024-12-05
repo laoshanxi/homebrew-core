@@ -27,6 +27,9 @@ class Curlpp < Formula
 
   def install
     ENV.cxx11
+    
+    inreplace "CMakeLists.txt", /target_link_libraries\(\${PROJECT_NAME} PUBLIC CURL::libcurl \${CONAN_LIBS}\)/, ""
+    
     system "cmake", ".", *std_cmake_args
     system "make", "install"
     inreplace bin/"curlpp-config", Superenv.shims_path/ENV.cc, ENV.cc
