@@ -28,7 +28,16 @@ class Curlpp < Formula
   def install
     ENV.cxx11
     
-    inreplace "CMakeLists.txt", /target_link_libraries\(\${PROJECT_NAME} PUBLIC CURL::libcurl \${CONAN_LIBS}\)/, ""
+    # Ensure Homebrew's curl is used
+    ENV["LDFLAGS"] = "-L#{Formula["curl"].opt_lib}"
+    ENV["CPPFLAGS"] = "-I#{Formula["curl"].opt_include}"
+    ENV["PKG_CONFIG_PATH"] = Formula["curl"].opt_lib/"pkgconfig"
+
+    # RPATH for curl
+    cmake_args = std_cmake_args + [
+      "-DCMAKE_INSTALL_RPATH=#{Formula["curl"].opt_lib}",
+      "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
+    ]
     
     system "cmake", ".", *std_cmake_args
     system "make", "install"
