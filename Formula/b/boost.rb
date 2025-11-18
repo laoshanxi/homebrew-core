@@ -64,12 +64,12 @@ class Boost < Formula
       --with-icu=#{icu4c.opt_prefix}
     ]
 
-    # Handle libraries that will not be built.
-    without_libraries = ["python", "mpi"]
-
-    # Boost.Log cannot be built using Apple GCC at the moment. Disabled
-    # on such systems.
-    without_libraries << "log" if ENV.compiler == :gcc
+    # Handle libraries that will not be built. User-customized.
+    without_libraries = %w[
+      context coroutine exception locale log math python random
+      serialization mpi test wave container graph graph_parallel
+      chrono contract json nowide stacktrace type_erasure
+    ]
 
     bootstrap_args << "--without-libraries=#{without_libraries.join(",")}"
 
