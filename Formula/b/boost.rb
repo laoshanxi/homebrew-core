@@ -39,7 +39,6 @@ class Boost < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:  "2a9279f11fcd81f48f47d0b86389cddd27dc077f0ca6948f2ff83f720267119d"
   end
 
-  depends_on "icu4c@76"
   depends_on "xz"
   depends_on "zstd"
 
@@ -56,12 +55,9 @@ class Boost < Formula
       end
     end
 
-    # libdir should be set by --prefix but isn't
-    icu4c = deps.map(&:to_formula).find { |f| f.name.match?(/^icu4c@\d+$/) }
     bootstrap_args = %W[
       --prefix=#{prefix}
       --libdir=#{lib}
-      --with-icu=#{icu4c.opt_prefix}
     ]
 
     # Handle libraries that will not be built. User-customized.

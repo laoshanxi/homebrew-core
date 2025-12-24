@@ -31,17 +31,8 @@ class Curl < Formula
     depends_on "libtool" => :build
   end
 
-  keg_only :provided_by_macos
-
   depends_on "pkg-config" => :build
-  depends_on "brotli"
-  depends_on "libidn2"
-  depends_on "libnghttp2"
-  depends_on "libssh2"
-  depends_on "openldap"
   depends_on "openssl@3"
-  depends_on "rtmpdump"
-  depends_on "zstd"
 
   uses_from_macos "krb5"
   uses_from_macos "zlib"
@@ -58,19 +49,19 @@ class Curl < Formula
       --without-ca-bundle
       --without-ca-path
       --with-ca-fallback
-      --with-secure-transport
+      --without-secure-transport
       --with-default-ssl-backend=openssl
-      --with-libidn2
-      --with-librtmp
-      --with-libssh2
+      --disable-ftp
+      --disable-ldap
+      --disable-ldaps
+      --without-libidn2
+      --without-nghttp2
+      --without-brotli
+      --without-zstd
       --without-libpsl
+      --without-librtmp
+      --without-gssapi
     ]
-
-    args << if OS.mac?
-      "--with-gssapi"
-    else
-      "--with-gssapi=#{Formula["krb5"].opt_prefix}"
-    end
 
     system "./configure", *args
     system "make", "install"
